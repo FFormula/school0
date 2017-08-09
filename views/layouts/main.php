@@ -19,18 +19,29 @@ use yii\bootstrap\NavBar;
     <body>
 <?php $this->beginBody() ?>
 
+<div class="wrap">
 <?php
     NavBar::begin([
             'brandLabel' => 'VideoSchool',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
-                'class' => 'navbar-inverse navbar-fixed-top'
+                'class' => 'navbar-default navbar-fixed-top'
             ]
         ]);
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items' => [
+            ['label' => 'Join', 'url' => ['/home/join']],
+            ['label' => 'Login', 'url' => ['/home/login']]
+        ]
+    ]);
     NavBar::end(); ?>
 
-
+    <br/><br/><br/>
+    <div class="container">
         <?= $content ?>
+    </div>
+</div>
 
 <?php $this->endBody() ?>
 
