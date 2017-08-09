@@ -19,8 +19,9 @@ class HomeController extends Controller
         $user->password = "qwas";
         $user->status = 10;
         $userRecord = new UserRecord();
-        $userRecord->store($user);
-        return $this->render('join');
+        $userRecord -> setUser ($user);
+//        $userRecord->store($user);
+        return $this->render('join', [ "user" => $userRecord ]);
     }
 
     public function actionLogin ()

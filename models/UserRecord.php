@@ -20,12 +20,11 @@ class UserRecord extends ActiveRecord
         ];
     }
 
-    public function store (User $user)
+    public function setUser (User $user)
     {
         $this->id = $user->id;
         $this->email = $user->email;
         $this->password = $user->password;
         $this->status = $user->status;
-        $this->save();
     }
 }
