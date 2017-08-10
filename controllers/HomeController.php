@@ -14,13 +14,12 @@ class HomeController extends Controller
 
     public function actionJoin ()
     {
-        $user = new User();
-        $user->email = "fformula@gmail.com";
-        $user->password = "qwas";
-        $user->status = 10;
         $userRecord = new UserRecord();
-        $userRecord -> setUser ($user);
-//        $userRecord->store($user);
+        if ($userRecord->load($_POST))
+        {
+            $userRecord->save();
+            return $this->redirect("/home/index");
+        }
         return $this->render('join', [ "user" => $userRecord ]);
     }
 

@@ -1,0 +1,88 @@
+Установить OpenServer
+Перейти в domains
+Создать папку проекта
+открыть консоль
+инициализировать composer
+composer require "yiisoft/yii2"
+
+запустить phpstorm
+создадим web/index.php и пропишем кодик
+запускаем рнр-сервер
+php -S localhost:31415 -t web
+
+иниц. git (git init)
+.gitignore - в него помещаем vendor/ *.idea/
+git add * 
+git commit -m "Start Yii" в git bush 
+
+создадим папку Controllers
+в ней файл SiteController.php
+класс SiteControllser extends Controller
+подключаем все namespace
+use \yii\web\Controller;
+создаем функцию actionIndex()
+создаем config\web.php
+return []
+
+
+контроллер по умолчанию - defaultRoute
+views\home\index.php
+меняем представление web\index.php
+три строчки и обязательно new - новый класс
+в homecontroller - return $this->render('index');
+....
+git add *
+git commit -m "Controller and views"
+
+composer require "yiisoft/yii2-bootstrap:*"
+
+доавить в layout/main.php меню бутстрапа
+
+добавить ещё две страницы и прописать их в меню
+настроить урл - htaccess и config
+
+
+composer bower-asset library
+composer global require "fxp/composer-asset-plugin:*"
+
+добавить это в конфиг композера
+"config": {
+        "fxp-asset":{
+            "installer-paths": {
+                "bower-asset-library": "vendor/bower"
+            }
+        }
+    }
+удалить папку вендор
+composer update
+
+создаем модель
+папку models
+перейдем в models и создадим модель User.php
+создаем класс User{}
+
+открыть базу данных
+создать "school"
+прописать настройки подключения
+создать скрипт yii.php
+создать config/console.php
+создать config/db.php
+запустить
+php yii.php migrate/create create_user_table
+дописать код миграции для создания таблицы
+php yii.php migrate
+проверить созданные таблицы
+
+создать класс UserRecord extends ActiveRecord
+в контроллере прописать добавление пользователя
+добавить в конфиг запись о дб
+запустить проверить
+запустить повторно - проверка уникальности
+
+создание формы для регистрации
+
+
+ 
+
+
+
