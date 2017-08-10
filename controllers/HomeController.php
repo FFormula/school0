@@ -33,13 +33,13 @@ class HomeController extends Controller
 
     public function actionLogin ()
     {
-        return $this->justLogin();
         if (!\Yii::$app->user->isGuest)
             return $this->goHome();
 
         $login = new LoginForm();
-        if ($login->load(\Yii::$app->request->post()) and $login->login())
-            return $this->goBack();
+        if ($login->load(\Yii::$app->request->post()))
+            if ($login->login())
+                return $this->goBack();
 
         return $this->render('login', ["login" => $login]);
     }
@@ -51,7 +51,7 @@ class HomeController extends Controller
         $userIdentity = new UserIdentity();
         $userIdentity->setUser($user);
 
-        \Yii::$app->user->login($userIdentity, 3600 * 24 * 30);
+        \Yii::$app->user->login($userIdentity);
         return $this->goHome();
     }
 

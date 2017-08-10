@@ -12,7 +12,7 @@ class LoginForm extends Model
 
     /** @var UserIdentity */
     public $user;
-    private function getUser ($username)
+    private function getUserIdentity ($username)
     {
         if (!$this->user)
             $this->user = UserIdentity::findIdentityByUsername($username);
@@ -25,7 +25,7 @@ class LoginForm extends Model
             ['username', 'required'],
             ['password', 'required'],
             ['remember', 'boolean'],
-//            ['password', 'validatePassword']
+            ['password', 'validatePassword']
         ];
     }
 
@@ -34,7 +34,7 @@ class LoginForm extends Model
         if (!$this->validate())
             return false;
 
-        $user = $this -> getUser($this->username);
+        $user = $this -> getUserIdentity($this->username);
         if (!$user)
             return false;
 
@@ -42,5 +42,20 @@ class LoginForm extends Model
             $user,
             $this->remember ? 3600 * 24 * 30 : 0
         );
+    }
+
+    public function validatePassword($password)
+    {
+        if ($this->hasErrors())
+            return;
+
+        $user = $this -> getUserIdentity($this->username);
+        if (!($user and $this->isCorrectHash($this->password, $user->password)))
+            $this -> addError ('password', 'Incorrect username or password');
+    }
+
+    public function isCorrectHash ($password, $hash)
+    {
+        return \Yii::$app->security->validatePassword($password, $hash);
     }
 }
