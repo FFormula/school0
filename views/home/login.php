@@ -11,8 +11,9 @@ use yii\widgets\ActiveForm;
         'id' => 'login-user-form'
     ]); ?>
 
-    <?= $form->field($user, 'username') ?>
-    <?= $form->field($user, 'password')->passwordInput() ?>
+    <?= $form->field($login, 'username') ?>
+    <?= $form->field($login, 'password')->passwordInput() ?>
+    <?= $form->field($login, 'remember')->checkbox() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Login',

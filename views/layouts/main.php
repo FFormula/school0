@@ -33,7 +33,10 @@ use yii\bootstrap\NavBar;
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Join', 'url' => ['/home/join']],
-            ['label' => 'Login', 'url' => ['/home/login']]
+            (\Yii::$app->user->isGuest ?
+                ['label' => 'Login',  'url' => ['/home/login']] :
+                ['label' => \Yii::$app->user->getIdentity()->username . ' Logout', 'url' => ['/home/logout']]
+            )
         ]
     ]);
     NavBar::end(); ?>

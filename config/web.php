@@ -8,9 +8,12 @@
                 'enablePrettyUrl' => true,
                 'showScriptName' => false
             ],
+            'user' => [
+                'identityClass' => 'app\models\UserIdentity'
+            ],
             'request' => [
                 'cookieValidationKey' => 'super secret code'
             ],
             'db' => require(__DIR__ . '/db.php')
-        ]
+        ],
     ];

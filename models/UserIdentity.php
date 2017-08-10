@@ -26,6 +26,11 @@ class UserIdentity extends UserRecord implements IdentityInterface
         return static::findOne($id);
     }
 
+    public static function findIdentityByUsername($username)
+    {
+        return static::findOne(['username' => $username]);
+    }
+
     /**
      * Finds an identity by the given token.
      * @param mixed $token the token to be looked for
