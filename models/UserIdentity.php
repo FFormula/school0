@@ -9,6 +9,7 @@
 namespace app\models;
 
 
+use yii\base\NotSupportedException;
 use yii\web\IdentityInterface;
 
 class UserIdentity extends UserRecord implements IdentityInterface
@@ -22,7 +23,7 @@ class UserIdentity extends UserRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        // TODO: Implement findIdentity() method.
+        return static::findOne($id);
     }
 
     /**
@@ -36,7 +37,7 @@ class UserIdentity extends UserRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        // TODO: Implement findIdentityByAccessToken() method.
+        throw new NotSupportedException("You can only login by user/name pair for now.");
     }
 
     /**
@@ -45,7 +46,7 @@ class UserIdentity extends UserRecord implements IdentityInterface
      */
     public function getId()
     {
-        // TODO: Implement getId() method.
+        return $this->id;
     }
 
     /**
@@ -62,7 +63,7 @@ class UserIdentity extends UserRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        // TODO: Implement getAuthKey() method.
+        return $this->authokey;
     }
 
     /**
@@ -75,6 +76,6 @@ class UserIdentity extends UserRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        // TODO: Implement validateAuthKey() method.
+        return $this->getAuthKey() === $authKey;
     }
 }

@@ -15,6 +15,12 @@ class HomeController extends Controller
     public function actionJoin ()
     {
         $userRecord = new UserRecord();
+//        $user = new User ();
+//        $user->username = "John";
+//        $user->password = "qwas";
+//        $user->authokey = "1234";
+//        $userRecord->setUser($user);
+
         if ($userRecord->load($_POST))
         {
             $userRecord->save();
