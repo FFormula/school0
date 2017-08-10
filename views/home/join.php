@@ -1,3 +1,4 @@
+<p hidden>views.home.join</p>
 <?php
     use app\models\User;
     use yii\web\View;
