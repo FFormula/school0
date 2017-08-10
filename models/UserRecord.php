@@ -14,27 +14,27 @@ class UserRecord extends ActiveRecord
     {
         return [
             ['id', 'number'],
-            ['email', 'required'],
+            ['username', 'required'],
             ['password', 'required'],
-            ['status', 'number']
+            ['authokey', '']
         ];
     }
 
     public function setUser(User $user)
     {
         $this->id = $user->id;
-        $this->email = $user->email;
+        $this->username = $user->username;
         $this->password = $user->password;
-        $this->status = $user->status;
+        $this->authokey = $user->authokey;
     }
 
     public function getUser()
     {
         $user = new User();
         $user->id = $this->id;
-        $user->email = $this->email;
+        $user->username = $this->username;
         $user->password = $this->password;
-        $user->status = $this->status;
+        $user->authokey = $this->authokey;
         return $user;
     }
 }
