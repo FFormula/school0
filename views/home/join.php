@@ -1,7 +1,5 @@
 <p hidden>views.home.join</p>
 <?php
-    use app\models\User;
-    use yii\web\View;
     use yii\helpers\Html;
     use yii\widgets\ActiveForm;
 ?>
@@ -10,10 +8,10 @@
 <div class="">
 
     <?php $form = ActiveForm::begin([
-            'id' => 'join-user-form'
+        'id' => 'join-user-form'
     ]); ?>
 
-    <?= $form->field($user, 'email') ?>
+    <?= $form->field($user, 'username') ?>
     <?= $form->field($user, 'password')->passwordInput() ?>
 
     <div class="form-group">

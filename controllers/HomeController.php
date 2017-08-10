@@ -25,6 +25,12 @@ class HomeController extends Controller
 
     public function actionLogin ()
     {
-        return $this->render('login');
+        $userRecord = new UserRecord();
+        if ($userRecord->load($_POST))
+        {
+//            $userRecord->save();
+            return $this->redirect("/home/index");
+        }
+        return $this->render('login', [ "user" => $userRecord ]);
     }
 }
