@@ -1,3 +1,268 @@
+== запуск веб-сервера
+запустить OpenServer
+открыть консоль
+создать папку domains/school
+создать папку web
+создать файл index.php
+настроить OpenServer на эту папку
+открыть через браузер localhost
+запустить рнр-сервер php -S localhost:31415 -t web
+открыть через браузер localhost:31415
+
+== загрузка yii дистрибутивов
+выйти в папку domains
+composer global require "fxp/composer-asset-plugin:*"
+добавление токена для скачивание дистрибутива из гитхаба
+установить basic-приложение
+composer create-project --prefer-dist --stability=dev yiisoft/yii2-app-basic basic
+пока скачивается - открыть уже скачанное и объяснить структуру каталогов
+настроить OpenServer на папку basic.localhost
+открыть проект, обзорно посмотреть код
+
+== работа с гитом
+git init
+git status
+git add web
+git commit -m "create index file"
+запустить phpstorm
+git status
+создать .gitignore через phpstorm
+вписать .idea
+вписать vendor
+добавлять файлы можно в phpstorm, но в ручном режиме
+git commit -m "add .gitignore file"
+
+== установка пустого фреймворка
+composer require "yiisoft/yii2:*"
+посмотреть composer.json
+посмотреть папку vendor
+создать папку config и файл web.php
+переписать файл index.php - 4 строчки:
+require, config, application, run
+запускаем - ошибка 404 - нужен контроллер
+
+== создание контроллера
+создаём controllers/SiteController.php
+class SiteController extends Controller
+function actionIndex() return 'hello'
+поменять на return $this->render('index')
+обновить страницу - ошибка
+добавить в index define ('YII_DEBUG', true);
+обновить страницу и внимательно изучить
+
+== создание представления
+создать папку views/site
+создать файл index.php - <h1>Welcome</h1>
+обновить страницу - ошибка
+рассказать про лето
+создать файл views/layouts/main.php
+<html>
+    <head>
+        <title>VideoSchool</title>
+    </head>
+    <body>
+        <?= $content ?>
+    </body>
+</html>
+обновить
+просмотреть исходный код
+закомиттить
+
+
+== тестирование проекта - приёмочные тесты
+composer require "codeception/codeception:*"
+рассказать про тестирование
+vendor/bin/codecept bootstrap
+прочитать все сообщения
+
+vendor\bin\codecept generate:cept acceptance TestGuestPages
+вписать в новый файл:
+$I = new AcceptanceTester($scenario);
+$I->wantTo('Open the home/join/login pages');
+$I->amOnPage('/');
+$I->see('Welcome', 'h1');
+запустить тест:
+vendor\bin\codecept run
+
+добавить в тест:
+$I->seeLink('Join', '/site/join');
+$I->seeLink('Login', '/site/login');
+
+$I->amOnPage('/site/join');
+$I->see('Join us', 'h1');
+
+$I->amOnPage('/site/login');
+$I->see('Log in', 'h1');
+
+запустить тест
+будем добавлять новые страницы
+
+== оформление сайта 
+composer require "yiisoft/yii2-bootstrap:*"
+добавить в layout/main.php меню бутстрапа
+	use yii\bootstrap\NavBar;
+    NavBar::begin([
+        'brandLabel' => 'VideoSchool',
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => [
+            'class' => 'navbar-default navbar-fixed-top'
+        ]
+    ]);
+    NavBar::end();
+обновить - ошибка - нет ассет
+создать папку web/assets
+создать файл .gitignore - * !.gitignore
+обновить - ошибка - bower-asset
+добавить это в конфиг композера
+"config": {
+        "fxp-asset":{
+            "installer-paths": {
+                "bower-asset-library": "vendor/bower"
+            }
+        }
+    }
+удалить папку vendor/bower-asset
+composer update
+обновить - бутстрап не загружен
+добавить триггеры типа <?php $this->endBody() ?>
+обновить - фраза спрятана за панелью 
+добавить <div class="container">
+(спросить Лену, как исправить)
+
+== добавление страниц join / login
+добавление пунктов меню
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items' => [
+            ['label' => 'Join', 'url' => ['/site/join']],
+            ['label' => 'Login',  'url' => ['/site/login']]
+        ]
+    ]);
+обновить - появились пункты меню
+создать функции actionJoin/Login
+создать представления join.php / login.php
+сделаем красивую адресную строку
+config - 
+        'components' => [
+            'urlManager' => [
+                'enablePrettyUrl' => true,  // 1
+                'showScriptName' => false   // 2
+            ],
+.htaccess
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php
+закомитить
+
+
+== создание модели
+создание базы данных
+открыть HeidiSQL
+создать базу данных school
+прописать настройки подключения в config/db.php
+return [
+    'class' => '\yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=school',
+    'username' => 'root',
+    'password' => ''
+];
+создать config/console.php
+return [
+    'id' => 'school-console',
+    'basePath' => dirname(__DIR__),
+    'components' => [
+        'db' => require(__DIR__ . '/db.php')
+    ]
+];
+создать скрипт yii.php
+define ('YII_DEBUG', true);
+require (__DIR__ . '/vendor/autoload.php');
+require (__DIR__ . '/vendor/yiisoft/yii2/Yii.php');
+$config = require (__DIR__ . '/config/console.php');
+$app = new yii\console\Application($config);
+$app -> run();
+
+запустить php yii.php
+php yii.php migrate/create create_user_table
+открыть файл migrations/m***_create_user_table.php
+дописать код миграции для создания таблицы
+выполнить миграцию php yii.php migrate
+проверить таблицы в базе данных
+
+создаем модель models/User.php
+namespace app\models;
+class User
+{
+    public $id;
+    public $username;
+    public $password;
+}
+создать класс UserRecord extends ActiveRecord
+namespace app\models;
+use yii\db\ActiveRecord;
+class UserRecord extends ActiveRecord
+{
+    public function setUser(User $user)
+}
+в контроллере прописать добавление пользователя
+попробовать запустить - ошибка
+добавить инфу о базе в config/web.php
+запустить проверить
+добавить функцию 
+    public static function tableName()
+запустить проверить
+запустить повторно - проверка уникальности
+закомментировать добавление
+
+== добавление формы регистрации
+добавить строчки в тест:
+$I->seeElement(['name' => 'UserRecord[username]']);
+$I->seeElement(['name' => 'UserRecord[password]']);
+$I->seeElement('button', ['type' => 'submit']);
+запускаем тест :)
+добавляем оформление в файл join.php
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
+            <?= $form->field($user, 'username') ?>
+            <?= $form->field($user, 'password')->passwordInput() ?>
+            <?= Html::submitButton('Create',
+                ['class' => 'btn btn-success']) ?>
+добавить строчку в конфиг файл
+        'request' => [
+            'cookieValidationKey' => 'super secret code'
+        ],
+открыть страницу
+валидация данных
+заполнить форму и подтвердить
+добавить функцию валидации
+    public function rules()
+    {
+        return [
+            ['id', 'number'],
+            ['username', 'required'],
+            ['password', 'string', 'min' => 5]
+        ];
+    }
+почитать правила правил:
+http://www.yiiframework.com/doc-2.0/yii-base-model.html#rules()-detail
+вписать в actionJoin регистрацию пользователя
+        if ($userRecord->load($_POST))
+        {
+            $userRecord->save();
+            return $this->redirect("/site/login");
+        }
+добавить проверку на уникальность
+запустить тест
+
+== добавление форма аутентификации
+
+
+
+
+
+
+
 Установить OpenServer
 Перейти в domains
 Создать папку проекта
@@ -36,7 +301,7 @@ git commit -m "Controller and views"
 
 composer require "yiisoft/yii2-bootstrap:*"
 
-доавить в layout/main.php меню бутстрапа
+добавить в layout/main.php меню бутстрапа
 
 добавить ещё две страницы и прописать их в меню
 настроить урл - htaccess и config
@@ -56,30 +321,6 @@ composer global require "fxp/composer-asset-plugin:*"
 удалить папку вендор
 composer update
 
-создаем модель
-папку models
-перейдем в models и создадим модель User.php
-создаем класс User{}
-
-открыть базу данных
-создать "school"
-прописать настройки подключения
-создать скрипт yii.php
-создать config/console.php
-создать config/db.php
-запустить
-php yii.php migrate/create create_user_table
-дописать код миграции для создания таблицы
-php yii.php migrate
-проверить созданные таблицы
-
-создать класс UserRecord extends ActiveRecord
-в контроллере прописать добавление пользователя
-добавить в конфиг запись о дб
-запустить проверить
-запустить повторно - проверка уникальности
-
-создание формы для регистрации
 
 
  

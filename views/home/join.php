@@ -14,10 +14,8 @@
     <?= $form->field($user, 'username') ?>
     <?= $form->field($user, 'password')->passwordInput() ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Create',
-            ['class' => 'btn btn-success']) ?>
-    </div>
+    <?= Html::submitButton('Create',
+        ['class' => 'btn btn-success']) ?>
 
     <?php ActiveForm::end(); ?>
 

@@ -15,7 +15,7 @@ class UserRecord extends ActiveRecord
         return [
             ['id', 'number'],
             ['username', 'required'],
-            ['password', 'required']
+            ['password', 'string', 'min' => 5]
         ];
     }
 
